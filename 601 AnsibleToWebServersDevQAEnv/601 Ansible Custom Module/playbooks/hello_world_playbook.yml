@@ -1,0 +1,10 @@
+---
+- hosts: web
+  become: yes
+  gather_facts: yes
+  tasks:
+    - name: Calling hello world custom module
+      hello_world: 
+      register: result
+
+    - debug: var=result   

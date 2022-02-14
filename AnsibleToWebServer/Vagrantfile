@@ -1,0 +1,71 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+Vagrant.configure(2) do |config|
+
+  config.vm.define "ansible_control" do |ansible_control_server|
+    ansible_control_server.vm.box = "centos/7"
+    ansible_control_server.vm.hostname = "ansiblecontrolserver"
+    ansible_control_server.vm.network "private_network", ip: "192.168.10.5"
+	ansible_control_server.vm.synced_folder ".", "/vagrant"
+	
+	ansible_control_server.ssh.insert_key = false
+    ansible_control_server.ssh.private_key_path = ["C:/Users/Training/.ssh/id_rsa", "~/.vagrant.d/insecure_private_key"]
+	ansible_control_server.vm.provision "file", source: "C:/Users/Training/.ssh/id_rsa", destination: "~/.ssh/id_rsa"
+    ansible_control_server.vm.provision "file", source: "C:/Users/Training/.ssh/id_rsa.pub", destination: "~/.ssh/authorized_keys"
+
+    ansible_control_server.vm.provision "shell", inline: <<-SSHCONFIG
+      sudo sed -i -e "\\#PasswordAuthentication yes# s#PasswordAuthentication yes#PasswordAuthentication no#g" /etc/ssh/sshd_config
+      sudo systemctl restart sshd.service
+      echo "finished"
+    SSHCONFIG
+	
+	ansible_control_server.vm.provision "shell", inline: <<-SHELL
+    #sudo yum -y update
+    #sudo yum install tree -y
+	sudo yum install epel-release -y
+	sudo yum install ansible -y
+   	sudo ansible --version
+	 
+   SHELL
+  end
+
+  config.vm.define "webserver" do |web01|
+    web01.vm.box = "centos/7"
+    web01.vm.hostname = "webserver01"
+    web01.vm.network "private_network", ip: "192.168.10.6"
+
+	web01.vm.network "forwarded_port", guest: 22, host: 22
+    web01.vm.network "forwarded_port", guest: 80, host: 80,
+    auto_correct: true
+
+	web01.ssh.insert_key = false
+    web01.ssh.private_key_path = ["C:/Users/Training/.ssh/id_rsa", "~/.vagrant.d/insecure_private_key"]
+    web01.vm.provision "file", source: "C:/Users/Training/.ssh/id_rsa.pub", destination: "~/.ssh/authorized_keys"
+
+    web01.vm.provision "shell", inline: <<-SSHCONFIG
+      sudo sed -i -e "\\#PasswordAuthentication yes# s#PasswordAuthentication yes#PasswordAuthentication no#g" /etc/ssh/sshd_config
+      sudo systemctl restart sshd.service
+      echo "finished"
+    SSHCONFIG
+  end
+  
+    config.vm.define "webserver02" do |web02|
+    web02.vm.box = "centos/7"
+    web02.vm.hostname = "webserver02"
+    web02.vm.network "private_network", ip: "192.168.10.7"
+
+	web02.vm.network "forwarded_port", guest: 22, host: 23
+    web02.vm.network "forwarded_port", guest: 80, host: 80,
+    auto_correct: true
+
+	web02.ssh.insert_key = false
+    web02.ssh.private_key_path = ["C:/Users/Training/.ssh/id_rsa", "~/.vagrant.d/insecure_private_key"]
+    web02.vm.provision "file", source: "C:/Users/Training/.ssh/id_rsa.pub", destination: "~/.ssh/authorized_keys"
+
+    web02.vm.provision "shell", inline: <<-SSHCONFIG
+      sudo sed -i -e "\\#PasswordAuthentication yes# s#PasswordAuthentication yes#PasswordAuthentication no#g" /etc/ssh/sshd_config
+      sudo systemctl restart sshd.service
+      echo "finished"
+    SSHCONFIG
+  end
+end

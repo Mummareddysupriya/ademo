@@ -1,0 +1,25 @@
+vagrant up
+
+ssh  -o StrictHostKeyChecking=no  vagrant@192.168.10.5
+
+ssh  -o StrictHostKeyChecking=no  vagrant@192.168.10.6
+
+ssh  -o StrictHostKeyChecking=no  vagrant@192.168.10.7
+
+chmod 400 ~/.ssh/id_rsa
+
+cd 601*
+
+
+ansible-playbook -i env/dev/hosts playbooks/hello_world_playbook.yml -v 
+
+ansible-playbook -i env/qa/hosts playbooks/hello_world_playbook.yml -v 
+
+ansible-playbook -i env/all/hosts playbooks/hello_world_playbook.yml -v 
+
+=========================================================
+cd 602*
+ansible-playbook -i env/all/hosts playbooks/person.yml -v 
+
+
+vagrant destroy

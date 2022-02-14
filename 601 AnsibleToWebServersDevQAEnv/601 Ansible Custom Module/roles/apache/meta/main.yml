@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  role_name: apache
+  author: Kumar
+  version: 1.0
+  name: apache
+  description: Automated Installation and Configuring on RHEL/Centos 7 OS_Family
+  displayName: Kumar
+  metadata:
+    displayName: Apache-Role
+    providerDisplayName: "Kumar"
+  license: NA
+  min_ansible_version: 2.4
+  platforms:
+    - name: EL
+      versions:
+        - 1
+  galaxy_tags:
+    - web
+  dependencies: []

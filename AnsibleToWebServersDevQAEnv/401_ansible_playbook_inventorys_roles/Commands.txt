@@ -1,0 +1,23 @@
+vagrant up
+
+ssh  -o StrictHostKeyChecking=no  vagrant@192.168.10.5
+
+ssh  -o StrictHostKeyChecking=no  vagrant@192.168.10.6
+
+ssh  -o StrictHostKeyChecking=no  vagrant@192.168.10.7
+
+chmod 400 ~/.ssh/id_rsa
+
+ansible-playbook -i env/dev/hosts playbooks/site.yml -v
+
+ansible-playbook -i env/qa/hosts playbooks/site.yml -v
+
+ansible-playbook -i env/all/hosts playbooks/site.yml -v
+
+
+http://192.168.10.6
+
+http://192.168.10.7
+
+
+vagrant destroy

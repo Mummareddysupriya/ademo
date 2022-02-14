@@ -1,0 +1,12 @@
+https://www.vagrantup.com/downloads
+https://www.virtualbox.org/wiki/Downloads
+https://git-scm.com/downloads
+https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html
+ 
+
+
+
+VM with software installed in:
+1. Vagrant 2.2.7 or latest
+2. Version 6.1.4 r136177 (Qt5.6.2) or latest
+3. CentOS by vagrant file

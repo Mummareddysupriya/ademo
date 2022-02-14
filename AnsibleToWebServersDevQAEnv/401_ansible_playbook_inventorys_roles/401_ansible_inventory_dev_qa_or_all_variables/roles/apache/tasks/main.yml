@@ -1,0 +1,4 @@
+# Master Task for installing and configuring Apache
+- name : Installing and configuring httpd server
+  include_tasks: webserver.yml
+  tags: webserver

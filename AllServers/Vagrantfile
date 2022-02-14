@@ -1,0 +1,25 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+Vagrant.configure(2) do |config|
+
+  config.vm.define "ansible_control" do |ansible_control_server|
+    ansible_control_server.vm.box = "centos/7"
+    ansible_control_server.vm.hostname = "ansiblecontrolserver"
+    ansible_control_server.vm.network "private_network", ip: "192.168.10.5"
+	ansible_control_server.vm.provision "shell", inline: <<-SHELL
+     #sudo yum -y update
+     sudo yum -y install ansible -y
+   	 sudo ansible --version
+   SHELL
+  end
+
+  config.vm.define "webserver" do |web01|
+    web01.vm.box = "centos/7"
+    web01.vm.hostname = "webserver01"
+    web01.vm.network "private_network", ip: "192.168.10.6"
+	web01.vm.provision "shell", inline: <<-SHELL
+     #sudo yum -y update
+     sudo yum -y install httpd -y
+   SHELL
+  end
+end

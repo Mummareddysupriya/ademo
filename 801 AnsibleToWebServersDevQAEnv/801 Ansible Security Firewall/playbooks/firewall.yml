@@ -1,0 +1,25 @@
+---
+- hosts: web
+  become: yes
+  gather_facts: yes
+  tasks:
+    # NOTE: This playbook *adds* rules. It does not delete existing rules.
+
+    # Strategy: Use "dmz" zone and add http.
+
+    - name: Enable firewalld
+      service: name=firewalld state=started enabled=yes
+
+    - name: Set dmz as default policy
+      command: firewall-cmd --set-default-zone=dmz
+
+    - name: Allow http
+      command: firewall-cmd --zone=dmz --permanent --add-service=http
+
+    - name: 3000 (Graphana) is open to monitor(s)
+      when: install_graphana|default(True)
+      command: firewall-cmd --permanent --zone=dmz --add-rich-rule='rule family="ipv4" source address="{{ item }}/32" port port=3000 protocol="tcp" accept'
+      with_items: "{{ default(["192.168.10.6", "192.168.10.7"]) }}"
+
+    - name: Restart firewalld
+      service: name=firewalld state=restarted  

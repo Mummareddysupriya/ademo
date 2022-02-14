@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  role_name: Ansible-WordPress-Role
+  author: Kumar
+  version: 1.0
+  name: Ansible-WordPress-Role
+  description: Automated Installation and Configuring WORDPRESS on LAMP Based on RHEL/Centos 7 OS_Family
+  displayName: Kumar
+  metadata:
+    displayName: Ansible-WordPress-Role
+    providerDisplayName: "Kumar"
+  license: NA
+  min_ansible_version: 2.7
+  platforms:
+    - name: EL
+      versions:
+        - 7
+  galaxy_tags:
+    - web
+    - database
+    - wordpress
+  dependencies: []

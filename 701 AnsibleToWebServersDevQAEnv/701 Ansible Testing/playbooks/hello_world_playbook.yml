@@ -1,0 +1,27 @@
+---
+- hosts: web
+  become: yes
+  gather_facts: yes
+  tasks:
+    - name: Calling hello world custom module
+      hello_world:
+      register: result
+
+    - debug: var=result
+
+    - name: this task will make changes to the system even in check mode
+      command: df -h
+      check_mode: no
+
+    - name: Touch a file, using symbolic modes to set the permissions (equivalent to 0644)
+      file:
+        path: /etc/foo.conf
+        state: touch
+        mode: u=rw,g=r,o=r
+
+    - name: this task will always run under checkmode and not change the system
+      lineinfile:
+        line: "important config"
+        dest: /etc/foo.conf
+        state: present
+      check_mode: yes      

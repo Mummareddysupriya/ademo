@@ -1,0 +1,16 @@
+---
+- hosts: web
+  become: yes
+  gather_facts: yes
+
+  vars_prompt:
+    - name: name
+      prompt: "Please provide your name"
+      private: no
+      failed_when: name is undefined
+
+  tasks:
+    - name: Calling Ansible Custom Module
+      person_name: name={{ name }}
+      register: result
+    - debug: var=result

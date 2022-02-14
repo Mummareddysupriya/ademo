@@ -1,0 +1,27 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+Vagrant.configure(2) do |config|
+
+  config.vm.define "ansible_control" do |ansible_control_server|
+    ansible_control_server.vm.box = "centos/7"
+    ansible_control_server.vm.hostname = "ansiblecontrolserver"
+    ansible_control_server.vm.network "private_network", ip: "192.168.10.5"
+	
+    ansible_control_server.ssh.insert_key = false
+    ansible_control_server.ssh.private_key_path = ["~/.ssh/id_rsa", "~/.vagrant.d/insecure_private_key"]
+    ansible_control_server.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/authorized_keys"
+
+    ansible_control_server.vm.provision "shell", inline: <<-SSHCONFIG
+      sudo sed -i -e "\\#PasswordAuthentication yes# s#PasswordAuthentication yes#PasswordAuthentication no#g" /etc/ssh/sshd_config
+      sudo systemctl restart sshd.service
+      echo "finished"
+    SSHCONFIG
+	
+	ansible_control_server.vm.provision "shell", inline: <<-SHELL
+     sudo yum -y update
+     sudo yum -y install ansible -y
+   	 sudo ansible --version
+   SHELL
+  end
+end
+
